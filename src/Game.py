@@ -1,7 +1,6 @@
 import os
 import random
 import sys
-
 import pygame as pg
 
 
@@ -56,7 +55,7 @@ class Game:
         self.window = pg.display.set_mode((self.width, self.height))
         self.display = pg.Surface((self.width, self.height))
         self.running, self.playing, self.menu = True, False, True
-        self.font = os.path.join("digital-7.ttf")
+        self.font = os.path.join("src\\assets\\fonts\\digital-7.ttf")
         self.ball = Ball(self.display, (255, 0, 0), self.height/2, self.width/2, 20, 20)
         self.players = [Paddle(self.display, (255, 0, 0), self.height / 2 - 35, 10, 7, 70),
                         Paddle(self.display, (255, 0, 0), self.height / 2, self.width - 20, 7, 70)]
@@ -64,6 +63,7 @@ class Game:
         self.powers = [PowerBlock(self.display, (0, 0, 255), self.height / 2 - 100, self.width / 2, 30, 30),
                        PowerBlock(self.display, (255, 0, 0), self.height / 2 + 100, self.width / 2, 30, 30),
                        PowerBlock(self.display, (255, 0, 255), self.height / 2, self.width / 2, 30, 30)]
+
 
     def mainMenu(self):
         self.ballReset(self.width, self.height)
@@ -80,12 +80,14 @@ class Game:
             pg.display.update()
             self.clock.tick(self.FPS)
 
+
     def drawText(self, text, size, colour, x, y):
         font = pg.font.Font(self.font, size)
         fontRender = font.render(text, False, colour)
         fontRect = fontRender.get_rect()
         fontRect.center = (x, y)
         self.window.blit(fontRender, fontRect)
+
 
     def checkMenu(self):
         for event in pg.event.get():
@@ -107,9 +109,11 @@ class Game:
                         self.menu = True
                         self.mainMenu()
 
+
     def drawPaddles(self, paddles):
         for paddle in paddles:
             pg.draw.rect(paddle.surface, paddle.colour, paddle)
+
 
     def movePaddles(self, keyPressed):
         if keyPressed[pg.K_s] and self.players[0].rect.height + self.players[0].rect.y < self.height:
@@ -136,7 +140,7 @@ class Game:
     #     ball = self.ball.rect
     #     pg.mixer.init()
     #
-    #     beepSound = pg.mixer.Sound(os.path.join("Sounds", "SFX_-_beep_08.ogg"))
+    #     beepSound = pg.mixer.Sound(os.path.join("src\assets\sounds\SFX_-_beep_08.ogg", "SFX_-_beep_08.ogg"))
     #     beepSound.set_volume(0.3)
     #
     #     if ball.colliderect(self.players[0]) or ball.colliderect(self.players[1]):
@@ -153,7 +157,7 @@ class Game:
     #     playerOne = self.players[0].rect
     #     playerTwo = self.players[1].rect
     #
-    #     beepSound = pg.mixer.Sound(os.path.join("Sounds", "SFX_-_beep_08.ogg"))
+    #     beepSound = pg.mixer.Sound(os.path.join("src\assets\sounds\SFX_-_beep_08.ogg", "SFX_-_beep_08.ogg"))
     #     beepSound.set_volume(0.3)
     #
     #     if (ball.x <= playerOne.x + playerOne.width and ball.x + ball.width >= playerOne.x) and \
@@ -163,9 +167,11 @@ class Game:
     #         beepSound.play()
     #         self.ball.ballXSpeed *= -1
 
+
     def ballReset(self, width, height):
         self.ball.rect.x = width/2
         self.ball.rect.y = height/2
+
 
     def animateBall(self):
         self.ball.rect.x += self.ball.ballXSpeed
@@ -186,7 +192,7 @@ class Game:
         if self.ball.rect.top <= 0 or self.ball.rect.bottom >= self.height:
             self.ball.ballYSpeed *= -1
 
-        beepSound = pg.mixer.Sound(os.path.join("Sounds", "SFX_-_beep_08.ogg"))
+        beepSound = pg.mixer.Sound(os.path.join("src\\assets\\sounds", "SFX_-_beep_08.ogg"))
         beepSound.set_volume(0.3)
 
         # Good luck, next weeks Mikey's problem lol
@@ -211,11 +217,13 @@ class Game:
 
         pg.draw.ellipse(self.display, (255, 0, 255), self.ball.rect)
 
+
     def animatePaddles(self):
         # self.checkPaddleCollision()
         keyPressed = pg.key.get_pressed()
         self.movePaddles(keyPressed)
         self.drawPaddles(self.players)
+
 
     def animatePowers(self):
         for power in self.powers:
@@ -228,10 +236,12 @@ class Game:
             if power.rect.bottom >= self.height or power.rect.top <= 0:
                 power.speed *= -1
 
+
     def updateScore(self):
         self.drawText("Score", 60, (255, 0, 0), self.width / 2, self.height / 2 - 200)
         self.drawText(f"{self.players[0].score}", 70, (255, 0, 255), self.width / 2 - 250, self.height / 2 - 150)
         self.drawText(f"{self.players[1].score}", 70, (255, 0, 255), self.width / 2 + 250, self.height / 2 - 150)
+
 
     def gameLoop(self):
         while self.playing:
@@ -244,3 +254,10 @@ class Game:
             self.updateScore()
             pg.display.update()
             self.clock.tick(self.FPS)
+
+
+if __name__ == "__main__":
+    game = Game()
+
+    while True:
+        game.mainMenu()
