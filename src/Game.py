@@ -179,35 +179,27 @@ class Game:
 
         ball = self.ball.rect
 
-        playerOneRight = self.players[0].rect.x + self.players[0].rect.width
-        playerOneLeft = self.players[0].rect.x
-        playerOneTop = self.players[0].rect.y
-        playerOneBottom = self.players[0].rect.y + self.players[0].rect.height
-
-        playerTwoRight = self.players[1].rect.x + self.players[1].rect.width
-        playerTwoLeft = self.players[1].rect.x
-        playerTwoTop = self.players[1].rect.y
-        playerTwoBottom = self.players[1].rect.y + self.players[1].rect.height
+        playerOneRect = self.players[0].rect
+        playerTwoRect = self.players[1].rect
 
         if self.ball.rect.top <= 0 or self.ball.rect.bottom >= self.height:
             self.ball.ballYSpeed *= -1
 
-        beepSound = pg.mixer.Sound(os.path.join("assets", "sounds", "SFX_-_beep_08.ogg"))
+        beepSound = pg.mixer.Sound(os.path.join("src","assets","sounds", "SFX_-_beep_08.ogg"))
         beepSound.set_volume(0.3)
 
-        # Good luck, next weeks Mikey's problem lol
-        # Check if the paddle and ball are moving in the same direction
-        if (ball.x <= playerOneRight and ball.x + ball.width >= playerOneLeft) and \
-                (ball.y <= playerOneBottom and ball.y + ball.height >= playerOneTop) or \
-                (ball.x <= playerTwoRight and ball.x + ball.width >= playerTwoLeft) and \
-                (ball.y <= playerTwoBottom and ball.y + ball.height >= playerTwoTop):
-
+        if ball.colliderect(playerOneRect):
             beepSound.play()
             self.ball.ballXSpeed *= -1
-            self.ball.ballYSpeed *= -1
+            self.ball.rect.left = playerOneRect.right
 
-        if self.ball.rect.left <= 0 - 30 or self.ball.rect.right >= self.width + 30:
-            if self.ball.rect.left <= 0 - 30:
+        elif ball.colliderect(playerTwoRect):
+            beepSound.play()
+            self.ball.ballXSpeed *= -1
+            self.ball.rect.right = playerTwoRect.left
+
+        if self.ball.rect.left <= -30 or self.ball.rect.right >= self.width + 30:
+            if self.ball.rect.left <= -30:
                 self.players[1].score += 1
             else:
                 self.players[0].score += 1
@@ -216,6 +208,7 @@ class Game:
             self.ballReset(self.width, self.height)
 
         pg.draw.ellipse(self.display, (255, 0, 255), self.ball.rect)
+
 
 
     def animatePaddles(self):
