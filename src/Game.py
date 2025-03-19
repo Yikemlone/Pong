@@ -55,7 +55,7 @@ class Game:
         self.window = pg.display.set_mode((self.width, self.height))
         self.display = pg.Surface((self.width, self.height))
         self.running, self.playing, self.menu = True, False, True
-        self.font = os.path.join("src\\assets\\fonts\\digital-7.ttf")
+        self.font = os.path.join("assets","fonts","digital-7.ttf")
         self.ball = Ball(self.display, (255, 0, 0), self.height/2, self.width/2, 20, 20)
         self.players = [Paddle(self.display, (255, 0, 0), self.height / 2 - 35, 10, 7, 70),
                         Paddle(self.display, (255, 0, 0), self.height / 2, self.width - 20, 7, 70)]
@@ -192,7 +192,7 @@ class Game:
         if self.ball.rect.top <= 0 or self.ball.rect.bottom >= self.height:
             self.ball.ballYSpeed *= -1
 
-        beepSound = pg.mixer.Sound(os.path.join("src\\assets\\sounds", "SFX_-_beep_08.ogg"))
+        beepSound = pg.mixer.Sound(os.path.join("assets", "sounds", "SFX_-_beep_08.ogg"))
         beepSound.set_volume(0.3)
 
         # Good luck, next weeks Mikey's problem lol
